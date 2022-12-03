@@ -1,36 +1,63 @@
 from matplotlib import pyplot
+import random
 
 # Define the dimensions of the maze
 MAZE_WIDTH = 10
-MAZE_HEIGHT = 8
+MAZE_HEIGHT = 10
+
+
+maze = []
+for _ in range(MAZE_HEIGHT):
+    maze.append([True] * MAZE_WIDTH)
+
+# Randomly generate the walls and obstacles in the maze
+for y in range(1, MAZE_HEIGHT - 1):
+    for x in range(1, MAZE_WIDTH - 1):
+        if random.random() < 0.3:
+            maze[y][x] = False
 
 # Define the starting position of the robot
-robot_x = 0
-robot_y = 0
+# Choose a random starting position for the robot
+found_start = False
+while not found_start:
+    robot_x = random.randint(0, MAZE_WIDTH - 1)
+    robot_y = random.randint(0, MAZE_HEIGHT - 1)
+    if maze[robot_y][robot_x] and (maze[robot_y - 1][robot_x] or maze[robot_y][robot_x - 1] or maze[robot_y][robot_x + 1] or maze[robot_y + 1][robot_x]):
+        found_start = True
 
-# Define the goal position
-goal_x = 4
-goal_y = 7
+# Set the starting position of the robot
+robot_x = robot_x
+robot_y = robot_y
+
+
+
+# Choose a random goal position
+found_goal = False
+while not found_goal:
+    goal_x = random.randint(0, MAZE_WIDTH - 1)
+    goal_y = random.randint(0, MAZE_HEIGHT - 1)
+    if maze[goal_y][goal_x] and (robot_x, robot_y) != (goal_x, goal_y):
+        found_goal = True
+
+# Set the goal position
+goal_x = goal_x
+goal_y = goal_y
+
+print("Starting Point:", (robot_x, robot_y))
+print("Destination Point:", (goal_x, goal_y))
+
 
 # Define the maze as a grid of booleans, where False represents a wall and
 # True represents a free space
-maze = [
-    [True, True, True, True, True, True, True, True, True, True],
-    [True, False, False, False, False, False, False, False, False, True],
-    [True, False, True, True, False, True, True, True, False, True],
-    [True, False, True, False, False, False, False, True, False, True],
-    [True, False, True, False, True, True, False, True, False, True],
-    [True, False, True, False, True, False, False, True, False, True],
-    [True, False, True, True, True, False, True, True, False, True],
-    [True, True, True, True, True, True, True, True, True, True]
-]
+
 
 # Initialize a new figure with pyplot.figure
 
 
 
 # Define the robot's direction
-# 0 = North, 1 = East, 2 = South, 3 = West
+# 0 = North, 1 = East
+
 direction = 0
 
 # Define the robot's movement
@@ -41,7 +68,7 @@ movement = 1
 memory = []
 
 # Define the maximum number of steps the robot should take before giving up
-max_steps = 100
+max_steps = 1000
 
 # Define the current step count
 step_count = 0
@@ -110,7 +137,13 @@ def check_front(x, y, d):
 
 # Main loop
 while not check_goal(robot_x, robot_y) and step_count < max_steps:
-
+    print(f"Robot position: ({robot_x}, {robot_y}), direction: {direction}")
+    fig = pyplot.figure()
+    ax = fig.add_subplot(111)
+    ax.imshow(maze, cmap="gray", interpolation="nearest", origin="upper")
+    ax.plot(robot_x, robot_y, "ro")
+    fig = pyplot.figure()
+    pyplot.show()
     
     # If the robot is blocked and has not reached the goal, add its current
     # position to its memory
@@ -128,25 +161,8 @@ while not check_goal(robot_x, robot_y) and step_count < max_steps:
 
     # Increment the step count
     
-    print(f"Robot position: ({robot_x}, {robot_y}), direction: {direction}")
-    fig = pyplot.figure()
 
-    # Add a subplot to the figure
-    ax = fig.add_subplot(111)
-
-    # Plot the maze grid as an image on the subplot
-    ax.imshow(maze, cmap="gray", interpolation="nearest", origin="upper")
-
-    # Plot the robot as a red circle at its current position
-    ax.plot(robot_x, robot_y, "ro")
-
-
-    # Initialize a new figure with pyplot.figure
-    fig = pyplot.figure()
-
-
-    # Show the figure
-    pyplot.show()
+    
     step_count += 1
     
     # If the robot has reached the goal, print a success message
