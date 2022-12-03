@@ -5,7 +5,9 @@ This script solve mazes and visualizes them
 
 
 Starting Point:
+
 ![Starting Point](start.png)
 
 Ending Point:
+
 ![Ending Point](end.png)
