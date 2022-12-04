@@ -13,6 +13,7 @@ Ending Point:
 ![Ending Point](end.png)
 
 
-Video:
 
-![Video](video.avi)
+
+https://user-images.githubusercontent.com/54573938/205468516-0e80b062-140e-40b3-8c35-02b3e5a4dd35.mp4
+
