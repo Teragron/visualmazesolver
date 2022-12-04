@@ -1,6 +1,8 @@
 from matplotlib import pyplot
+from moviepy.editor import ImageClip, VideoClip
 import random
 
+images = []
 # Define the dimensions of the maze
 MAZE_WIDTH = 10
 MAZE_HEIGHT = 10
@@ -68,7 +70,7 @@ movement = 1
 memory = []
 
 # Define the maximum number of steps the robot should take before giving up
-max_steps = 1000
+max_steps = 150
 
 # Define the current step count
 step_count = 0
@@ -137,14 +139,16 @@ def check_front(x, y, d):
 
 # Main loop
 while not check_goal(robot_x, robot_y) and step_count < max_steps:
-    print(f"Robot position: ({robot_x}, {robot_y}), direction: {direction}")
+    # Save a frame of the video
+    print(f"Robot position: ({robot_x}, {robot_y}), direction: {direction}, steps: {step_count}")
     fig = pyplot.figure()
     ax = fig.add_subplot(111)
     ax.imshow(maze, cmap="gray", interpolation="nearest", origin="upper")
     ax.plot(robot_x, robot_y, "ro")
-    fig = pyplot.figure()
-    pyplot.show()
-    
+    pyplot.savefig("frames/frame_{}.jpg".format(step_count))
+    images.append("frames/frame_{}.jpg".format(step_count))
+    #pyplot.show()
+
     # If the robot is blocked and has not reached the goal, add its current
     # position to its memory
     if not check_front(robot_x, robot_y, direction) and not check_goal(robot_x, robot_y):
@@ -169,7 +173,14 @@ while not check_goal(robot_x, robot_y) and step_count < max_steps:
 if check_goal(robot_x, robot_y):
     print(f"Robot position: ({robot_x}, {robot_y}), direction: {direction}")
     print(f"The robot has reached the goal in {step_count} steps!")
+    fig = pyplot.figure()
+    ax = fig.add_subplot(111)
+    ax.imshow(maze, cmap="gray", interpolation="nearest", origin="upper")
+    ax.plot(robot_x, robot_y, "ro")
+    pyplot.savefig("frames/frame_{}.jpg".format(step_count))
+    images.append("frames/frame_{}.jpg".format(step_count))
+    #pyplot.show()
 # Otherwise, print a failure message
 else:
     print(f"The robot failed to reach the goal after {max_steps} steps.")
-
+    
